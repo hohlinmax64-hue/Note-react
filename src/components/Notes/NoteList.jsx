@@ -6,6 +6,7 @@ export default function NotesList({notes}) {
         return (
             <NoteCard
                 key={item.id}
+                id={item.id}
                 title={item.title}
                 tags={item.tags}
                 description={item.description}

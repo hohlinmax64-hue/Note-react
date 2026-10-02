@@ -1,9 +1,10 @@
 import {useState, useEffect, useMemo, useCallback, memo} from "react";
-import { Routes, Route } from "react-router-dom";
+import {Routes, Route} from "react-router-dom";
 
 import Layout from "../components/Layout/Layout.jsx";
 import Notes from "../pages/Notes/Notes.jsx";
 import NoteForm from "../components/Notes/NoteForm.jsx";
+import NoteRead from "../components/Notes/NoteRead.jsx";
 import Favorites from "../pages/Favorites/Favorites.jsx";
 import Ideas from "../pages/Categories/Ideas.jsx";
 import Personal from "../pages/Categories/Personal.jsx";
@@ -12,7 +13,6 @@ import Study from "../pages/Categories/Study.jsx";
 
 export default function App() {
     const [notes, setNotes] = useState([]);
-
     const [input, setInput] = useState({
         search: "",
         searchFilter: "",
@@ -38,11 +38,20 @@ export default function App() {
     }
 
     function handleTitle(e) {
-        e.preventDefault();
         setInput({
             ...input,
             notesTitle: e.target.value
         })
+    }
+
+    function handleChangeTitle(id, e) {
+        let editValueTitle = notes.map((note) => {
+            if(String(note.id) === id) {
+                return {...note, title: e.target.value};
+            }
+            return note
+        })
+        setNotes(editValueTitle);
     }
 
     function handleContent(e) {
@@ -53,6 +62,15 @@ export default function App() {
         })
     }
 
+    function handleChangeContent(id, e) {
+        let editValueContent = notes.map((note) => {
+            if(String(note.id) === id) {
+                return {...note,  description: e.target.value};
+            }
+            return note
+        })
+        setNotes(editValueContent);
+    }
 
     function handleAddNote() {
         if(!input.notesTitle && !input.notesContent) {
@@ -62,7 +80,6 @@ export default function App() {
         let newNote = {
             id: Date.now(),
             title: input.notesTitle,
-            content: '',
             description: input.notesContent,
             category: selectCategory,
             favorite: false,
@@ -79,6 +96,10 @@ export default function App() {
         })
     }
 
+    function handleNoteRead(id) {
+        let readerNote = notes.find((note) => String(note.id) === id);
+        return readerNote
+    }
 
   return (
       <>
@@ -91,12 +112,16 @@ export default function App() {
                       />
                   }
               >
-                  <Route path="/notes" element={
+                  <Route path="/" element={
                       <Notes
                       input={input}
                       setInput={handleSearchFilterChange}
                       notes={notes}
+                      NoteRead={handleNoteRead}
                   />} />
+                  <Route path='/noteread/:id' element={
+                      <NoteRead note={notes} readNotes={handleNoteRead} setTitle={handleChangeTitle} setDescription={handleChangeContent}/>
+                  }/>
                   <Route path="/noteform" element={
                       <NoteForm
                           inputTitle={input}
@@ -107,6 +132,7 @@ export default function App() {
                           selectCategory={selectCategory}
                           setSelectedCategory={setSelectCategory}
                       />} />
+
                   <Route path="/favorites" element={<Favorites />} />
                   <Route path="/categories/ideas" element={<Ideas />} />
                   <Route path="/categories/personal" element={<Personal />} />

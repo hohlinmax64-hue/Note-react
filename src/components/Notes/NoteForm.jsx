@@ -6,7 +6,7 @@ export default function NoteForm({inputTitle, setInputTitle, inputContent, setIn
     return (
         <div className="w-full max-w-5xl border-2 border-gray-600 p-[12px] m-3">
             <button className='mb-4'>
-                <Link to={'/notes'}>← Back to notes</Link>
+                <Link to={'/'}>← Back to notes</Link>
             </button>
             <div className="my-2">
                 <p className='text-xl mb-4'>New Note</p>
@@ -42,7 +42,7 @@ export default function NoteForm({inputTitle, setInputTitle, inputContent, setIn
                 <button className='text-xl my-3'>Add to favorites</button>
                 <div className='my-3 flex gap-2 justify-end'>
                     <button className='text-xl cursor-pointer'>
-                        <Link to={'/notes'}>Cancel</Link>
+                        <Link to={'/'}>Cancel</Link>
                     </button>
                     <button className='text-xl cursor-pointer' onClick={() => addNote()}>Save Note</button>
                 </div>
