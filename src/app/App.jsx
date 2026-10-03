@@ -19,18 +19,19 @@ export default function App() {
         notesTitle: "",
         notesContent: ""
     });
-    const [selectCategory, setSelectCategory] = useState('Personal')
+    const [selectCategory, setSelectCategory] = useState('All')
+    const [categoryForNote, setCategoryForNote] = useState("Personal")
+    const [selectedDate, setSelectedDate] = useState("Newest")
 
     function handleSearchChange(e) {
-        e.preventDefault();
         setInput({
             ...input,
-            search: e.target.value,
+            search: e.target.value
         })
+        console.log(e.target.value)
     }
 
     function handleSearchFilterChange(e) {
-        e.preventDefault();
         setInput({
             ...input,
             searchFilter: e.target.value
@@ -81,10 +82,10 @@ export default function App() {
             id: Date.now(),
             title: input.notesTitle,
             description: input.notesContent,
-            category: selectCategory,
+            category: categoryForNote,
             favorite: false,
             tags: ['React, Javascript'],
-            createdAt: new Date().toDateString(),
+            createdAt: new Date().toLocaleString(),
         }
 
         setNotes(prev => [...prev, newNote]);
@@ -101,6 +102,41 @@ export default function App() {
         return readerNote
     }
 
+    function searchNotes(notes, input) {
+        console.log(notes)
+        console.log(input)
+        if(!input) {
+            return notes
+        }
+        let noteTheSearch = notes.filter(({title}) => {
+            return title.toLowerCase().includes(input.toLowerCase());
+        })
+        console.log(noteTheSearch);
+        return noteTheSearch
+    }
+
+    function filterByCategory(notes) {
+        let filteredNoteByCategory = notes.filter((note) => {
+            if(selectCategory === note.category) return true
+            if(selectCategory === 'All') return true
+
+            return false
+        })
+        return filteredNoteByCategory
+    }
+
+    function filterByData(notes) {
+            if(selectedDate === 'Newest'){
+                return [...notes].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+            }
+            if(selectedDate === 'Old'){
+                return [...notes].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            }
+            return notes
+    }
+    let filteredNotesByDate = filterByData(notes)
+    let filteredNotes = filterByCategory(filteredNotesByDate);
+    let searchedNotesByTitle = searchNotes(filteredNotes, input.searchFilter);
   return (
       <>
           <Routes>
@@ -117,7 +153,12 @@ export default function App() {
                       input={input}
                       setInput={handleSearchFilterChange}
                       notes={notes}
+                      notesSearch={searchedNotesByTitle}
                       NoteRead={handleNoteRead}
+                      select={selectCategory}
+                      setSelected={setSelectCategory}
+                      selectDate={selectedDate}
+                      setSelectedDate={setSelectedDate}
                   />} />
                   <Route path='/noteread/:id' element={
                       <NoteRead note={notes} readNotes={handleNoteRead} setTitle={handleChangeTitle} setDescription={handleChangeContent}/>
@@ -129,8 +170,8 @@ export default function App() {
                           inputContent={input}
                           setInputContent={handleContent}
                           addNote={handleAddNote}
-                          selectCategory={selectCategory}
-                          setSelectedCategory={setSelectCategory}
+                          selectCategory={categoryForNote}
+                          setSelectedCategory={setCategoryForNote}
                       />} />
 
                   <Route path="/favorites" element={<Favorites />} />

@@ -3,7 +3,7 @@ import FilterBar from "../../components/Search/FilterBar.jsx";
 import NotesList from "../../components/Notes/NoteList.jsx";
 import {Link} from "react-router-dom";
 
-export default function Notes({notes, input, setInput}) {
+export default function Notes({input, setInput, notesSearch, select, setSelected, selectDate, setSelectedDate}) {
 
     return (
             <div className="w-full my-10 mx-12">
@@ -14,8 +14,14 @@ export default function Notes({notes, input, setInput}) {
                     </Button>
                 </div>
 
-                <FilterBar input={input} setInput={setInput} />
-                <NotesList notes={notes}/>
+                <FilterBar input={input}
+                           setInput={setInput}
+                           select={select}
+                           seSelcet={setSelected}
+                           selectDate={selectDate}
+                           setSelectedDate={setSelectedDate}
+                />
+                <NotesList notesSearch={notesSearch}/>
             </div>
     )
 }

@@ -1,7 +1,7 @@
 import Input from "../UI/Input.jsx";
 import {Link} from "react-router-dom";
 
-export default function NoteForm({inputTitle, setInputTitle, inputContent, setInputContent, addNote, selectCategory, setSelectedCategory}) {
+export default function NoteForm({inputTitle, setInputTitle, inputContent, setInputContent, addNote, select, setSelectedCategory}) {
 
     return (
         <div className="w-full max-w-5xl border-2 border-gray-600 p-[12px] m-3">
@@ -18,9 +18,7 @@ export default function NoteForm({inputTitle, setInputTitle, inputContent, setIn
 
                     <div className="my-3 w-full">
                         <p className='text-xl mb-2'>Category</p>
-                        <select value={selectCategory}
-                                onChange={(e) => setSelectedCategory(e.target.value)}
-                                className='border rounded-sm  border-gray-900 w-full p-2'>
+                        <select value={select} onChange={(e) => setSelectedCategory(e.target.value)} className='border rounded-sm border-gray-900 w-full p-2'>
                             <option value='Personal'>Personal</option>
                             <option value='Work'>Work</option>
                             <option value='Study'>Study</option>

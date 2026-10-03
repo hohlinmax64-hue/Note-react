@@ -1,8 +1,8 @@
 import NoteCard from "./NoteCard.jsx";
 
 
-export default function NotesList({notes}) {
-    const item = notes.map((item) => {
+export default function NotesList({notesSearch}) {
+    const item = notesSearch.map((item) => {
         return (
             <NoteCard
                 key={item.id}
@@ -19,7 +19,7 @@ export default function NotesList({notes}) {
     })
 
     return (
-        <div className="flex justify-between items-start flex-wrap mt-8">
+        <div className="h-[550px] flex gap-10 items-start flex-wrap mt-8 mx-auto overflow-y-scroll">
             {item.length === 0 ? <p className='mx-auto'>Not is empty</p> : item}
         </div>
     )
