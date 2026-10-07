@@ -1,4 +1,4 @@
-import {useState, useEffect, useMemo, useCallback, memo} from "react";
+import {useState} from "react";
 import {Routes, Route} from "react-router-dom";
 
 import Layout from "../components/Layout/Layout.jsx";
@@ -13,6 +13,7 @@ import Study from "../pages/Categories/Study.jsx";
 
 export default function App() {
     const [notes, setNotes] = useState([]);
+    const [favorite, setFavorite] = useState(false);
     const [input, setInput] = useState({
         search: "",
         searchFilter: "",
@@ -83,7 +84,7 @@ export default function App() {
             title: input.notesTitle,
             description: input.notesContent,
             category: categoryForNote,
-            favorite: false,
+            favorite: favorite,
             tags: ['React, Javascript'],
             createdAt: new Date().toLocaleString(),
         }
@@ -134,6 +135,22 @@ export default function App() {
             }
             return notes
     }
+
+    function addNoteToFavorite(id) {
+        console.log('add to favorite')
+
+        setNotes(prev => prev.map((note) => {
+            if(note.id === id) {
+                return {...note, favorite: !note.favorite}
+            }
+            return note
+        }))
+    }
+
+    function addNoteToFavoriteByBoolen() {
+        setFavorite(prev => !prev)
+    }
+
     let filteredNotesByDate = filterByData(notes)
     let filteredNotes = filterByCategory(filteredNotesByDate);
     let searchedNotesByTitle = searchNotes(filteredNotes, input.searchFilter);
@@ -159,6 +176,7 @@ export default function App() {
                       setSelected={setSelectCategory}
                       selectDate={selectedDate}
                       setSelectedDate={setSelectedDate}
+                      addToFavorites={addNoteToFavorite}
                   />} />
                   <Route path='/noteread/:id' element={
                       <NoteRead note={notes} readNotes={handleNoteRead} setTitle={handleChangeTitle} setDescription={handleChangeContent}/>
@@ -172,6 +190,8 @@ export default function App() {
                           addNote={handleAddNote}
                           selectCategory={categoryForNote}
                           setSelectedCategory={setCategoryForNote}
+                          btnFavorite={addNoteToFavoriteByBoolen}
+                          favorite={favorite}
                       />} />
 
                   <Route path="/favorites" element={<Favorites />} />

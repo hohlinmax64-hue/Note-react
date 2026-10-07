@@ -1,7 +1,7 @@
 import NoteCard from "./NoteCard.jsx";
 
 
-export default function NotesList({notesSearch}) {
+export default function NotesList({notesSearch, addToFavorites}) {
     const item = notesSearch.map((item) => {
         return (
             <NoteCard
@@ -14,6 +14,7 @@ export default function NotesList({notesSearch}) {
                 createdAt={item.createdAt}
                 favorite={item.favorite}
                 updatedAt={item.updatedAt}
+                addToFavorites={addToFavorites}
             />
         )
     })

@@ -1,7 +1,7 @@
 import Input from "../UI/Input.jsx";
 import {Link} from "react-router-dom";
 
-export default function NoteForm({inputTitle, setInputTitle, inputContent, setInputContent, addNote, select, setSelectedCategory}) {
+export default function NoteForm({inputTitle, setInputTitle, inputContent, setInputContent, addNote, select, setSelectedCategory, btnFavorite, favorite}) {
 
     return (
         <div className="w-full max-w-5xl border-2 border-gray-600 p-[12px] m-3">
@@ -37,7 +37,7 @@ export default function NoteForm({inputTitle, setInputTitle, inputContent, setIn
                         <textarea value={inputContent.value} onChange={setInputContent} className="border rounded-sm border-gray-900 w-full p-2 min-h-[200px] resize-none" placeholder="Content" />
                     </div>
                 </div>
-                <button className='text-xl my-3'>Add to favorites</button>
+                <button className='text-xl my-3' onClick={() => btnFavorite(btnFavorite)}>{favorite ? 'Remove from favorite' : 'Add to favorites'}</button>
                 <div className='my-3 flex gap-2 justify-end'>
                     <button className='text-xl cursor-pointer'>
                         <Link to={'/'}>Cancel</Link>
