@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom"
 
-export default function NoteCard({id, title, description, category, tags, createdAt, favorite, addToFavorites}) {
+export default function NoteCard({id, title, description, category, tags, createdAt, favorite, addToFavorites, deleteNote}) {
     const value = `/noteread/${id}`;
     return (
         <div className='border-2 rounded-[10px] border-gray-200 w-[300px] h-[250px] p-[12px] '>
@@ -17,7 +17,10 @@ export default function NoteCard({id, title, description, category, tags, create
                     <h3>{createdAt}</h3>
                 </div>
             </Link>
-            <button className='border border-cyan-500' onClick={() => addToFavorites(id)}>{favorite ? "⭐️" : "☆"}</button>
+            <div className='flex gap-2 text-xl mt-4'>
+                <button onClick={() => addToFavorites(id)}>{favorite ? "⭐️" : "☆"}</button>
+                <button onClick={() => deleteNote(id)}>🗑</button>
+            </div>
         </div>
 
     )

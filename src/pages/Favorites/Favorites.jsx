@@ -1,4 +1,4 @@
-export default function Favorites() {
+export default function Favorites({notesFavorites}) {
 
     return (
         <div className="w-full">

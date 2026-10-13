@@ -20,6 +20,15 @@ export default function App() {
         notesTitle: "",
         notesContent: ""
     });
+    const [tags, setTags] = useState([
+        {id: 1, name: "React"},
+        {id: 2, name: "Typescript"},
+        {id: 3, name: "Personal"},
+        {id: 4, name: "Deutsch"},
+    ]);
+    const [selectedTag, setSelectedTag] = useState([]);
+    const [newTagName, setNewTagName] = useState("");
+    const [openModal, setOpenModal] = useState(false);
     const [selectCategory, setSelectCategory] = useState('All')
     const [categoryForNote, setCategoryForNote] = useState("Personal")
     const [selectedDate, setSelectedDate] = useState("Newest")
@@ -147,8 +156,54 @@ export default function App() {
         }))
     }
 
+    function handleDeleteTask(id){
+        setNotes(prev => prev.filter((note) => note.id !== id))
+    }
+
     function addNoteToFavoriteByBoolen() {
         setFavorite(prev => !prev)
+    }
+
+    function handleChangeNewTagName(e){
+        setNewTagName(e.target.value)
+    }
+
+    function openModalWindow() {
+        setOpenModal(true);
+    }
+
+    function addTag(){
+        if(newTagName === ''){
+            alert("Please enter a tag")
+            return
+        }
+        const newItemTag = {
+            id: Date.now(),
+            name: newTagName,
+        }
+        setNewTagName('')
+        setTags(prevState => [...prevState, newItemTag])
+        setOpenModal(false);
+    }
+
+    function deleteTagFromSideBar(id){
+        setTags(prev => prev.filter((tag) => tag.id !== id))
+    }
+
+    function choiceTag(id){
+        const idTag = tags.find((tag) => tag.id === id)
+        setSelectedTag(prev => {
+            if(prev.some((tag) => tag.id === id)){
+                return prev
+            }
+            else {
+                return [...prev, idTag]
+            }
+        })
+    }
+
+    function deleteChoiceTag(id){
+        setSelectedTag(prev => prev.filter((tag) => tag.id !== id))
     }
 
     let filteredNotesByDate = filterByData(notes)
@@ -157,14 +212,7 @@ export default function App() {
   return (
       <>
           <Routes>
-              <Route
-                  element={
-                      <Layout
-                          input={input}
-                          setInput={handleSearchChange}
-                      />
-                  }
-              >
+              <Route element={<Layout tags={tags} deleteTagFromSideBar={deleteTagFromSideBar} />}>
                   <Route path="/" element={
                       <Notes
                       input={input}
@@ -177,9 +225,15 @@ export default function App() {
                       selectDate={selectedDate}
                       setSelectedDate={setSelectedDate}
                       addToFavorites={addNoteToFavorite}
+                      deleteNote={handleDeleteTask}
                   />} />
                   <Route path='/noteread/:id' element={
-                      <NoteRead note={notes} readNotes={handleNoteRead} setTitle={handleChangeTitle} setDescription={handleChangeContent}/>
+                      <NoteRead
+                          note={notes}
+                          readNotes={handleNoteRead}
+                          setTitle={handleChangeTitle}
+                          setDescription={handleChangeContent}
+                      />
                   }/>
                   <Route path="/noteform" element={
                       <NoteForm
@@ -192,6 +246,15 @@ export default function App() {
                           setSelectedCategory={setCategoryForNote}
                           btnFavorite={addNoteToFavoriteByBoolen}
                           favorite={favorite}
+                          selectedTag={selectedTag}
+                          deleteChoiceTag={deleteChoiceTag}
+                          choicTag={choiceTag}
+                          tags={tags}
+                          addTag={addTag}
+                          openModal={openModal}
+                          openModalWindow={openModalWindow}
+                          inputNameTag={newTagName}
+                          setInputNameTag={handleChangeNewTagName}
                       />} />
 
                   <Route path="/favorites" element={<Favorites />} />
