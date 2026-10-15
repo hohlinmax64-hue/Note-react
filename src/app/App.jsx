@@ -6,10 +6,10 @@ import Notes from "../pages/Notes/Notes.jsx";
 import NoteForm from "../components/Notes/NoteForm.jsx";
 import NoteRead from "../components/Notes/NoteRead.jsx";
 import Favorites from "../pages/Favorites/Favorites.jsx";
-import Ideas from "../pages/Categories/Ideas.jsx";
-import Personal from "../pages/Categories/Personal.jsx";
-import Work from "../pages/Categories/Work.jsx";
-import Study from "../pages/Categories/Study.jsx";
+import Ideas from "../pages/Categories/Ideas/Ideas.jsx";
+import Personal from "../pages/Categories/Personal/Personal.jsx";
+import Work from "../pages/Categories/Work/Work.jsx";
+import Study from "../pages/Categories/Study/Study.jsx";
 
 export default function App() {
     const [notes, setNotes] = useState([]);
@@ -27,6 +27,7 @@ export default function App() {
         {id: 4, name: "Deutsch"},
     ]);
     const [selectedTag, setSelectedTag] = useState([]);
+    const [selectTagByName, setSelectTagByName] = useState([]);
     const [newTagName, setNewTagName] = useState("");
     const [openModal, setOpenModal] = useState(false);
     const [selectCategory, setSelectCategory] = useState('All')
@@ -94,7 +95,7 @@ export default function App() {
             description: input.notesContent,
             category: categoryForNote,
             favorite: favorite,
-            tags: ['React, Javascript'],
+            tagsNote: selectedTag,
             createdAt: new Date().toLocaleString(),
         }
 
@@ -113,15 +114,12 @@ export default function App() {
     }
 
     function searchNotes(notes, input) {
-        console.log(notes)
-        console.log(input)
         if(!input) {
             return notes
         }
         let noteTheSearch = notes.filter(({title}) => {
             return title.toLowerCase().includes(input.toLowerCase());
         })
-        console.log(noteTheSearch);
         return noteTheSearch
     }
 
@@ -146,8 +144,6 @@ export default function App() {
     }
 
     function addNoteToFavorite(id) {
-        console.log('add to favorite')
-
         setNotes(prev => prev.map((note) => {
             if(note.id === id) {
                 return {...note, favorite: !note.favorite}
@@ -206,13 +202,59 @@ export default function App() {
         setSelectedTag(prev => prev.filter((tag) => tag.id !== id))
     }
 
-    let filteredNotesByDate = filterByData(notes)
+    function notesFavorites(){
+        const favNote = notes.filter((note) => note.favorite === true)
+        return favNote
+    }
+
+    function notesIdeas(){
+        let ideasNote = notes.filter((note) => note.category === 'Ideas')
+        return ideasNote
+    }
+
+    function notesPersonal(){
+        let personalNote = notes.filter((note) => note.category === 'Personal')
+        return personalNote
+    }
+
+    function notesStudy(){
+        let studyNote = notes.filter((note) => note.category === 'Study')
+        return studyNote
+    }
+
+    function notesWork(){
+        let workNote = notes.filter((note) => note.category === 'Work')
+        return workNote
+    }
+
+    function toggleTagSelection(tagsName){
+        setSelectTagByName(prev => {
+            if(prev.includes(tagsName)) {
+                return prev.filter((tag) => tag !== tagsName)
+            }
+            else {
+                return [...prev, tagsName]
+            }
+        })
+
+    }
+
+    function filterByTag(selectedTagName, arr) {
+        if(selectedTagName.length === 0){
+            return arr
+        }
+        const filterNoteByTag = arr.filter((note) => note.tagsNote.some((note) => selectedTagName.includes(note.name)))
+        return filterNoteByTag
+    }
+
+    let filterByChoiceTags = filterByTag(selectTagByName, notes)
+    let filteredNotesByDate = filterByData(filterByChoiceTags)
     let filteredNotes = filterByCategory(filteredNotesByDate);
     let searchedNotesByTitle = searchNotes(filteredNotes, input.searchFilter);
   return (
       <>
           <Routes>
-              <Route element={<Layout tags={tags} deleteTagFromSideBar={deleteTagFromSideBar} />}>
+              <Route element={<Layout tags={tags} addTagName={toggleTagSelection} deleteTagFromSideBar={deleteTagFromSideBar} selectTagByName={selectTagByName} />}>
                   <Route path="/" element={
                       <Notes
                       input={input}
@@ -257,11 +299,11 @@ export default function App() {
                           setInputNameTag={handleChangeNewTagName}
                       />} />
 
-                  <Route path="/favorites" element={<Favorites />} />
-                  <Route path="/categories/ideas" element={<Ideas />} />
-                  <Route path="/categories/personal" element={<Personal />} />
-                  <Route path="/categories/work" element={<Work />} />
-                  <Route path="/categories/study" element={<Study />} />
+                  <Route path="/favorites" element={<Favorites notesFavorites={notesFavorites} deleteNote={handleDeleteTask} deleteFavorite={addNoteToFavorite}/>} />
+                  <Route path="/categories/ideas" element={<Ideas IdeasNote={notesIdeas} deleteNote={handleDeleteTask} deleteFavorite={addNoteToFavorite} />} />
+                  <Route path="/categories/personal" element={<Personal personalNote={notesPersonal} deleteNote={handleDeleteTask} deleteFavorite={addNoteToFavorite} />} />
+                  <Route path="/categories/work" element={<Work workNotes={notesWork} deleteNote={handleDeleteTask} deleteFavorite={addNoteToFavorite} />} />
+                  <Route path="/categories/study" element={<Study notesStudy={notesStudy} deleteNote={handleDeleteTask} deleteFavorite={addNoteToFavorite}/>} />
               </Route>
           </Routes>
       </>
