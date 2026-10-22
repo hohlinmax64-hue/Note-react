@@ -1,16 +1,23 @@
-# React + Vite
+# 📝 Notes App – React App
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Eine moderne Notiz-App, entwickelt mit React, zur einfachen Erstellung, Organisation und Verwaltung persönlicher Notizen.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Notizen erstellen** – Neue Notizen erstellen und speichern.
+- **Kategorie-Filter** – Notizen nach verschiedenen Kategorien filtern.
+- **Datumsfilter** – Notizen nach ihrem Erstellungsdatum filtern.
+- **Tag-Filter** – Notizen anhand ihrer Tags filtern.
+- **Favoriten** – Wichtige Notizen zu den Favoriten hinzufügen.
 
-## React Compiler
+## 🛠️ Technologien
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React
+- JavaScript
+- CSS
+- HTML
 
-## Expanding the Oxlint configuration
+## 🚀 Ziel des Projekts
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Das Projekt dient dazu, praktische Erfahrungen mit React, State-Management, dynamischen Filtern und der Organisation von Daten in einer interaktiven Benutzeroberfläche zu sammeln.
+
